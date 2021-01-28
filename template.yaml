@@ -3,37 +3,111 @@ Transform: AWS::Serverless-2016-10-31
 Description: >
   todo-list-aws
 
-  Sample SAM Template for todo-list-aws
-
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
   Function:
     Timeout: 3
 
 Resources:
-  HelloWorldFunction:
+  GetFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
-      CodeUri: hello_world/
-      Handler: app.lambda_handler
+      CodeUri: src/
+      Handler: get.get
       Runtime: python3.8
       Events:
-        HelloWorld:
+        get:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
-            Path: /hello
+            Path: /todos/{id}
             Method: get
+  ListFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: src/
+      Handler: list.list
+      Runtime: python3.8
+      Events:
+        get:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /todos
+            Method: get
+  CreateFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: src/
+      Handler: create.create
+      Runtime: python3.8
+      Events:
+        get:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /todos
+            Method: put
+  DeleteFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: src/
+      Handler: delete.delete
+      Runtime: python3.8
+      Events:
+        get:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /todos/{id}
+            Method: delete
+  UpdateFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: src/
+      Handler: update.update
+      Runtime: python3.8
+      Events:
+        get:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /todos/{id}
+            Method: post
+  TranslateFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: src/
+      Handler: translate.translate
+      Runtime: python3.8
+      Events:
+        get:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /todos/translate/{id}/{language}
+            Method: get          
+           
 
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
   # Find out more about other implicit resources you can reference within SAM
   # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
-  HelloWorldApi:
-    Description: "API Gateway endpoint URL for Prod stage for Hello World function"
-    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/"
-  HelloWorldFunction:
-    Description: "Hello World Lambda Function ARN"
-    Value: !GetAtt HelloWorldFunction.Arn
-  HelloWorldFunctionIamRole:
-    Description: "Implicit IAM Role created for Hello World function"
-    Value: !GetAtt HelloWorldFunctionRole.Arn
+  TodosApi:
+    Description: "API Gateway endpoint URL for Prod stage for todo-list-aws"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/todos/"
+  GetFunction:
+    Description: "Get element by Id"
+    Value: !GetAtt GetFunction.Arn
+  ListFunction:
+    Description: "List all elements"
+    Value: !GetAtt ListFunction.Arn
+  CreateFunction:
+    Description: "Create element"
+    Value: !GetAtt CreateFunction.Arn
+  DeleteFunction:
+    Description: "Delete element"
+    Value: !GetAtt CreateFunction.Arn
+  TranslateFunction:
+    Description: "Tranlate element"
+    Value: !GetAtt CreateFunction.Arn
+  UpdateFunction:
+    Description: "Update element"
+    Value: !GetAtt CreateFunction.Arn
+  TodosFunctionIamRole:
+    Description: "Implicit IAM Role created for todo-list-aws"
+    Value: !GetAtt TodoListAwsRole.Arn
