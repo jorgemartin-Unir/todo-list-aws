@@ -1,0 +1,37 @@
+jenkins_instance_id = "i-0c204c010474cf500"
+jenkins_instance_security_group_id = "sg-086b3e363aefa29e7"
+jenkins_url = "http://3.89.102.103:8080"
+key_pair = <<EOT
+-----BEGIN RSA PRIVATE KEY-----
+MIIEowIBAAKCAQEAl5X4P9NdgYbUfXRWBZinEfdW8zc6fHC2afD6QlVn8PkF5khm
+h5wBP5iBWdx3Ssho6vY7GcWP54223gsLGI2lCcJGu4UHZsGH8MpH49Tq/P+wEUoQ
+hg66qb5yO8fp7ptFAakPbVRiJ5oIjd38pfasewZOuj66NqibPHpmD1dCU97hOgK/
+GGbNTwEAMZUIzjT7DaNtQ/hna6HUDe1yGAk4pCUFQiamzX6UO2V8BAmrtqqKP3eC
+g5wyy14bbsRimFJDbJIk4oOYJvIoWs+C8uza2yLrdfssDfjldR/dwCQDUqV6iDnO
+DJYtE9GJYtxGZANTReLx1p2mTIiqKvw+yirgqQIDAQABAoIBAEbYusvp15wADjQM
+OWAoNn15IlRODbG3ZCojjHOQQyIm4RD96Z2b1iGI/3umRMLY4+Bc8MZcxaMtYrho
+ZOk22lmzSSe/RvRJo2VwxSTAkItqXTnXad2d6LQI5I74Imd4fkoGX8VzWOS1YyYb
+CEfxADAHhKgbRSDisJsVgbnNyJw1qN5TuNtK0YwcNQZ8SPmDXbUpWUQDNY3x7RwE
+7uOf4IV02Fyk5yNVNSlfAGYJAN8cxPakGRTzUCuWGna3k1vIYKnyBMtD+eEfjSAa
+Q/c0q2XYnBk8fShqp9wmRh3OTagcStQNToCcgJY7F/6Vl5zVTNRSyhAANzo4VThx
+HGsVOXkCgYEAxDPBStS3FKCyo+thwxcB0B8se7W4QRav2D5id6bP6E7eG0O9kZC5
+ili704NvpuzzlFzZxpQPBbEk3hY/EsQ6ipyw+Dr82h3nRjKsY10630CNC+dAXDRO
+ohIudu2EtBSMpcB+p0M8P74YtgGQbzt6T4kMIjcYyd0Mx5UjyeMCBE8CgYEAxckf
+JM52XPAM/ijNoQjrdtDrVLwhjAltp2FnN0hUvjGguorYPmfxezqz35ajSc5MOwJi
+OpCNnj46Dutq3feIMp2+YgzVWK3hU4ZvabkX+gL1M/kJSd3plGrMV0KDZh9w4Z1s
+Muw6eZby9feoKMb5oXPtvd1QexAxFljhfhyV9YcCgYAiECI0za1jZWreTpVQe4QT
+D/Z3G9t7YWbyEhKiV1GtMVQaQ657wTaVMEabuCwAPQ8k6OHeOgJJqLGP5SjaJztK
+qV2IGyWe8KYgZ9fKAHuiGuDh+ioQV/x24tUyTJZHdXHdrQfQHjotjuFXZ/oddaQM
+fuyeXBZvpXL8i4YFHOZSvQKBgQCEw7S8KDsbt6eBFDKz3iDw6NyPTJnYPpv0t1Vp
+rovz/6w8i+cMPQnEBmunsp55dJmHItp9JXtqtaqTSUO7K+Wo1Gpvtt2fYVjXkG5J
+MY3+rO2brZemleetUONJz8QUURac2+c9Z4T5CXKd2VhvxuDal88GnADiGsRYk+EJ
+nnarEQKBgDKDuD0pgQdOElo6Xx+FiJCcxt6zhdGF9FJtGasCV8bCWk1228EuCKOb
+FIgPqFsJmayijHpaqeCRUxgz38P/28jcnq9pebwnZd1gwlbdnblTnFcpSis18Sgv
+Z2WReZVJZVBSHD/S7oYg03rDG6XwoSci4EzKW1S/50VlWUQ7HVRd
+-----END RSA PRIVATE KEY-----
+
+EOT
+public_ip = "3.89.102.103"
+s3_bucket_production = "es-unir-production-s3-64664-artifacts"
+s3_bucket_staging = "es-unir-staging-s3-64664-artifacts"
+ssh_connection = "ssh -i resources/key.pem ec2-user@3.89.102.103"

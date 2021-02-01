@@ -1,13 +1,13 @@
 import json
 import os
 import boto3
-import decimalencoder
+from todos import decimalencoder
 
 dynamodb = boto3.resource('dynamodb')
 
 
 def list(event, context):
-    table = dynamodb.Table("todoTable_B")
+    table = dynamodb.Table(os.environ['DYNAMODB_TABLE'])
 
     # fetch all todos from the database
     result = table.scan()
