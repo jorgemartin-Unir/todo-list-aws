@@ -11,4 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Nuevo repositorio Git en CodeCommit
 - Copiamos ultima version todo-list-serverless en todo-list-aws
 - Update template.yaml para agragar las funciones RESTful utilizadas en este proyecto de pruebas
+## [1.0.0] - 2020-31-01
+- Ejecución de proyecto en entorno local (SAM CLI) - pruebas 
+- Despliegue manual de aplicación SAM en Amazon Web Services
 
