@@ -10,8 +10,16 @@ pipeline {
 
         stage('Checkout') {
             steps {
-                // Get some code from a CodeCommit repository
-                sh "git clone https://${env.CODECOMMIT_USER}:${env.CODECOMMIT_PASSWORD}@git-codecommit.us-east-1.amazonaws.com/v1/repos/todo-list-serverless"
+                // Las credenciales utilizadas por IAM y para el usuario code-commit contiene caracter que deben ser "escapados" al usarlos por la url
+                // He utilizado las crediales del plugin Git obteniendo el mismo error
+                // Para no estancarme y continuar utilizare un repositorio GitHub. En caso de que tenga tiempo al final de la practica, intentare solucionar 
+                //el problema
+                //Si veis esto es que no he tenido tiempo
+                //sh "git clone https://${env.CODECOMMIT_USER}:${env.CODECOMMIT_PASSWORD}@git-codecommit.us-east-1.amazonaws.com/v1/repos/todo-list-aws"
+                
+                //descargamos codigo fuente
+                sh "git clone https://${env.CODECOMMIT_USER}:${env.CODECOMMIT_PASSWORD}@github.com/jorgemartin-Unir/todo-list-aws.git"
+                
             }
         }
         stage('SetUp'){
