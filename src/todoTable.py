@@ -2,15 +2,14 @@ import boto3
 from botocore.exceptions import ClientError
 import time
 import uuid
-
+import properties
 
 class todoTable(object):
 
     def __init__(self, table, dynamodb=None):
         self.tableName = table
         if not dynamodb:
-            dynamodb = boto3.resource(
-                'dynamodb', endpoint_url='http://localhost:8000')
+            dynamodb = boto3.resource('dynamodb')
         self.dynamodb = dynamodb
 
     def create_todo_table(self):
@@ -46,17 +45,17 @@ class todoTable(object):
         table = self.dynamodb.Table(self.tableName)
         table.delete()
 
-    def put_todo(self, text, id=None):
-"""  A completar por el alumno. Pista: todos/ToDoPutItem.py """
+#    def put_todo(self, text, id=None):
+#"""  A completar por el alumno. Pista: todos/ToDoPutItem.py """
 
-    def get_todo(self, id):
-"""  A completar por el alumno. Pista: todos/ToDoGetItem.py """
+#    def get_todo(self, id):
+#"""  A completar por el alumno. Pista: todos/ToDoGetItem.py """
 
-    def scan_todo(self):
-"""  A completar por el alumno. Pista: todos/ToDoListItems.py """
+#    def scan_todo(self):
+#"""  A completar por el alumno. Pista: todos/ToDoListItems.py """
 
-    def update_todo(self, text, id, checked):
-"""  A completar por el alumno. Pista: todos/ToDoUpdateItem.py """
+#    def update_todo(self, text, id, checked):
+#"""  A completar por el alumno. Pista: todos/ToDoUpdateItem.py """
 
-    def delete_todo(self, id):
-"""  A completar por el alumno. Pista: todos/ToDoDeleteItem.py """
+#    def delete_todo(self, id):
+#"""  A completar por el alumno. Pista: todos/ToDoDeleteItem.py """

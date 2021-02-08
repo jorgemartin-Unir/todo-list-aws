@@ -1,3 +1,4 @@
+import ToDoProperties
 import boto3
 from botocore.exceptions import ClientError
 
@@ -5,9 +6,9 @@ from botocore.exceptions import ClientError
 def list_todo(dynamodb=None):
     if not dynamodb:
         dynamodb = boto3.resource(
-            'dynamodb', endpoint_url="http://localhost:8000")
+            'dynamodb',  endpoint_url=ToDoProperties.DYNAMODB_URL)
 
-    table = dynamodb.Table('todoTable')
+    table = dynamodb.Table(ToDoProperties.TABLE_NAME)
 
     try:
         # fetch all todos from the database

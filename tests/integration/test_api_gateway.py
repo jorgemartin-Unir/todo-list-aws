@@ -10,7 +10,7 @@ Make sure env variable AWS_SAM_STACK_NAME exists with the name of the stack we a
 
 
 class TestApiGateway(TestCase):
-    api_endpoint: str
+    #api_endpoint: str
 
     @classmethod
     def get_stack_name(cls) -> str:

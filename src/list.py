@@ -2,6 +2,7 @@ import json
 import os
 import boto3
 import decimalencoder
+import properties
 
 dynamodb = boto3.resource('dynamodb')
 

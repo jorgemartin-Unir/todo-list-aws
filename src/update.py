@@ -2,7 +2,7 @@ import json
 import time
 import logging
 import os
-
+import properties
 import decimalencoder
 import boto3
 

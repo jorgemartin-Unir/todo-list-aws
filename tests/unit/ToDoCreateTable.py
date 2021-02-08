@@ -1,13 +1,14 @@
 import boto3
+import ToDoProperties
 
 
 def create_todo_table(dynamodb=None):
     if not dynamodb:
-        dynamodb = boto3.resource(
-            'dynamodb', endpoint_url='http://localhost:8000')
+        dynamodb = boto3.resource('dynamodb', endpoint_url=ToDoProperties.DYNAMODB_URL)
+        
 
     table = dynamodb.create_table(
-        TableName='todoTable',
+        TableName=ToDoProperties.TABLE_NAME,
         KeySchema=[
             {
                 'AttributeName': 'id',
@@ -27,7 +28,7 @@ def create_todo_table(dynamodb=None):
     )
 
     # Wait until the table exists.
-    table.meta.client.get_waiter('table_exists').wait(TableName='todoTable')
+    table.meta.client.get_waiter('table_exists').wait(TableName=ToDoProperties.TABLE_NAME)
     if (table.table_status != 'ACTIVE'):
         raise AssertionError()
 

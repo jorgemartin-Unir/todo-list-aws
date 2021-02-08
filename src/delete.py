@@ -1,11 +1,14 @@
 import os
-
 import boto3
+import properties
+
+
+
 dynamodb = boto3.resource('dynamodb')
 
 
 def delete(event, context):
-    table = dynamodb.Table("todoTable_B")
+    table = dynamodb.Table(properties.TABLE_NAME)
 
     # delete the todo from the database
     table.delete_item(

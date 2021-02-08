@@ -3,10 +3,10 @@ import logging
 import os
 import time
 import uuid
-
+import properties
 import boto3
-dynamodb = boto3.resource('dynamodb')
 
+dynamodb = boto3.resource('dynamodb')
 
 def create(event, context):
     data = json.loads(event['body'])
@@ -16,7 +16,8 @@ def create(event, context):
     
     timestamp = str(time.time())
 
-    table = dynamodb.Table('todoTable_B')
+    table = dynamodb.Table(properties.TABLE_NAME)
+
 
     item = {
         'id': str(uuid.uuid1()),

@@ -1,3 +1,4 @@
+import ToDoProperties
 import boto3
 from botocore.exceptions import ClientError
 import time
@@ -6,9 +7,9 @@ import time
 def update_todo(text, id, checked, dynamodb=None):
     if not dynamodb:
         dynamodb = boto3.resource(
-            'dynamodb', endpoint_url="http://localhost:8000")
+            'dynamodb',  endpoint_url=ToDoProperties.DYNAMODB_URL)
 
-    table = dynamodb.Table('todoTable')
+    table = dynamodb.Table(ToDoProperties.TABLE_NAME)
     timestamp = str(time.time())
 
     try:

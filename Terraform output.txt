@@ -35,3 +35,45 @@ public_ip = "3.89.102.103"
 s3_bucket_production = "es-unir-production-s3-64664-artifacts"
 s3_bucket_staging = "es-unir-staging-s3-64664-artifacts"
 ssh_connection = "ssh -i resources/key.pem ec2-user@3.89.102.103"
+
+
+
+
+
+jenkins_instance_id = "i-0eeb7a1d7e41cc4d2"
+jenkins_instance_security_group_id = "sg-0d736dd7b19d5b7b6"
+jenkins_url = "http://3.89.91.92:8080"
+key_pair = <<EOT
+-----BEGIN RSA PRIVATE KEY-----
+MIIEpAIBAAKCAQEAzvoWsg1RiX7n26F/YYTPtzk93TGrqXg50PyqB0vL4ldkm+NT
+8id87PCCpvAf92XoM/Njki/AXvKzvi93Ecj8EarCTUWEDxsLohLHlrLBI7FsyuKG
+b4fV/RXpaq9fLcmTSsKTOhQHELWZBQIJPDMG7vipD17ovBi2hyunwktJdzByJpZf
+tlBFk61dqznmvEp6ZNnyV5bSlK4FLpqekMvFBIiJeXVIJdKQFp+zQCP/5jKzzphx
+IWe0RMtQoH3F4s/kwKFpYBXFiNA4r7JZWpswpGc84yalU/iLk5llxL7nQyDXxqXA
+nkJ4B19Ek/cNGS5bnU2SuVAL9OIen/ueZEs61wIDAQABAoIBAGINOgk5pAH2G9MB
+a/3/1ANh27vZFxCeww0NVWNFdh4Q9rme9RrHuDfrLIn3Qb2LCnjp+aa8dm7EnYAg
+rlC/nSKleYzvvMMHNfie2uy6XCMTn41xyOw3NpnB8qU21Wk0kFGfYe3mpP42eXpU
+35kkN0mohTah6LGLJ5VbigrSbchHUUhSrCms2ttaihdkvTQN9bPvx/mAZauOZIOD
+LVn7VnWqIf1n0OzOxcWiUjwzOYF+xwlfMke1Piwdo7syA7Ylrau05u9zHTlW8ZKR
+3u9dFDtD56UYtvYTtjFdBcUQJ9MdNlrTx+yn/3mIXKOkPqf0B7WHzbiJtco/NYB3
+PSULwAECgYEA+dR4fNdJow8QZVjZ/cGBBmnTUQoEMukw1gvr4N8YWxDNabbcSMMq
+FrKxpntrzbzJWhZZ0yZaCQ7DAAdSMDV0g3n1f+zsAXrMXyDndEe89K8xxww2GMrq
+ebPvAC4hG3hvFexnwFC6IX4RJbIdzfF+AGWJaBEsrthQ2+FQr/fyGtcCgYEA1Bau
+30gQ5Wu5i6M3LilffcbzgEkTawF/ec7edY1qKBpdYhMkVBIG+MfsTYqRaUcE3Zsz
+qWB4MbfNfgQolYToxKX+Z0pt/ginby1zNRQWnMp4kD3se8Hi1gsTpGCqkcHc8ZG6
+xmx0PhV5C62jf+n/iHLIpm+1z3pYHvyJSutr4AECgYEAqDHtdE8U2lyX80Ngb8DI
+9uJkTFjr/sKUCGc6RMiuAxFK2fMsVyhdu65OgADz0S1aefY2PzvAvfxcODa1lJNI
+gAOpzphZQ53C3gCvEtABXNJeNt33xbVHKuyC6aIk0/O/BgmEyCsRRN80+CX0fuQo
+qmexnIiDhqtHtOD6i53oNz0CgYB0zzVrFmbv5H/hr3gRvYmxXWT5T8YZFk8eSFhv
+h/5irfqmrIJCp1cdqAa2wk3KHOpKH1O5wr8QKvpLoIC1sOj+fan7O5wO4LdO3Upp
+fnHh0wXJ88EOfD+xwZIE45SuCIbmqWukI1F2bB8p1m2JYthxTz7BpB8PcYOdNVts
+XvMgAQKBgQDNqTBI+v+zIAZGFuMaYeS9DSa6t9iQxkFlvCH7YgpgMQ1cBc54sQ3v
+cXG2RQQXLg6/1QdcAvPT3jbBrbBUQwYxpUrsuSw8RKk2dgztJugIFQcStLln6IDD
+YhqjIf/qQpE+TEXNama21xNiBqzUYZRoFyXZbNC8wROfJmwYgRaWIA==
+-----END RSA PRIVATE KEY-----
+
+EOT
+public_ip = "3.89.91.92"
+s3_bucket_production = "es-unir-production-s3-22163-artifacts"
+s3_bucket_staging = "es-unir-staging-s3-22163-artifacts"
+ssh_connection = "ssh -i resources/key.pem ec2-user@3.89.91.92"

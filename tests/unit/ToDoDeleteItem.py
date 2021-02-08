@@ -1,13 +1,14 @@
 import boto3
+import ToDoProperties
 from botocore.exceptions import ClientError
 
 
 def delete_todo(id, dynamodb=None):
     if not dynamodb:
         dynamodb = boto3.resource(
-            'dynamodb', endpoint_url="http://localhost:8000")
+            'dynamodb', endpoint_url=ToDoProperties.DYNAMODB_URL)
 
-    table = dynamodb.Table('todoTable')
+    table = dynamodb.Table(ToDoProperties.TABLE_NAME)
 
     try:
         # delete the todo from the database
