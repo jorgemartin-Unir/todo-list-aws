@@ -31,6 +31,9 @@ pipeline {
        /* stage('Test Group'){
             agent {
                //instalamos imagen con pytho. No he conseguido que funcione el virtualenv
+               //ni python en la maquina ec2.Por defecto esta intalada la 2.7. He instalado la
+               // 3.8.2, pero parece que al crear al instalar el virtual da un error por ir a por 
+               //la 2.7. 
                docker {
                     image 'python:3-alpine'
                      args '-u root:root'
@@ -115,7 +118,7 @@ pipeline {
                 }
             }
         }
-        /*stage('Integration Test on local') {
+        stage('Integration Test on local') {
             steps{
                 dir("todo-list-aws/test") {
                     // Unittest or pytest                   
@@ -128,18 +131,80 @@ pipeline {
             steps{
                 dir("todo-list-aws") {
                     // Deploy architecture
-                    sh "yes | sam deploy --template-file packaged.yaml --stack-name ${env.STACK_NAME} --parameter-overrides Environment=${env.ENVIRONMENT}"
+                    sh "yes | sam deploy  --stack-name ${env.STACK_NAME} --parameter-overrides Environment=${env.ENVIRONMENT}"
                 }   
             }
         }
+        
         stage('Integration Test after deploy'){
-            steps{
-                dir("todo-list-aws") {
-                    // Unittest or pytest                   
-                    // Unitary testing -> unittest or pytest against the lambda functions.
-                    echo 'test all methods works fine'
-                }   
+             agent {
+               docker {
+                    image 'python:3-alpine'
+                     args '-u root:root'
+                }
             }
-        }*/
+            steps{
+                script {
+                    
+                     final def (String response, int code) =
+                    sh(script: "curl -s -w '\\n%{response_code}' -u GET https://zggunvf6id.execute-api.us-east-1.amazonaws.com/Prod/todos/todos", returnStdout: true).trim()
+                    echo "HTTP response status code: $code"
+
+                    if (code == 200) {
+                        echo response
+                    }else
+                    {
+                        error "Error test integración LIST"
+                    }
+                    
+                    /*final def (String response, int code) =
+                    sh(script: "curl -s -w '\\n%{response_code}' -u POST https://zggunvf6id.execute-api.us-east-1.amazonaws.com/Prod/todos/todos  --data '{ \"text\": \"Learn Serverless\" }'", returnStdout: true).trim()
+                    echo "HTTP response status code: $code"
+
+                    if (code == 200) {
+                        echo response
+                    }else
+                    {
+                        error "Error test integración Create"
+                    }
+                    
+                   
+                    
+                    final def (String response, int code) =
+                    sh(script: "curl -s -w '\\n%{response_code}' -u GET https://zggunvf6id.execute-api.us-east-1.amazonaws.com/Prod/todos/todos", returnStdout: true).trim()
+                    echo "HTTP response status code: $code"
+
+                    if (code == 200) {
+                        echo response
+                    }else
+                    {
+                        error "Error test integración GET"
+                    }
+                    
+                    final def (String response, int code) =
+                    sh(script: "curl -s -w '\\n%{response_code}' -u GET https://zggunvf6id.execute-api.us-east-1.amazonaws.com/Prod/todos/todos", returnStdout: true).trim()
+                    echo "HTTP response status code: $code"
+
+                    if (code == 200) {
+                        echo response
+                    }else
+                    {
+                        error "Error test integración LIST"
+                    }
+                    
+                    final def (String response, int code) =
+                    sh(script: "curl -s -w '\\n%{response_code}' -u GET https://zggunvf6id.execute-api.us-east-1.amazonaws.com/Prod/todos/todos", returnStdout: true).trim()
+                    echo "HTTP response status code: $code"
+
+                    if (code == 200) {
+                        echo response
+                    }else
+                    {
+                        error "Error test integración LIST"
+                    }*/
+                }
+            }
+        }
+        
     }
 }
