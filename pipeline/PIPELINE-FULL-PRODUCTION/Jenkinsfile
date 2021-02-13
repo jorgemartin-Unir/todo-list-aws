@@ -1,4 +1,4 @@
-// A rellenar por el alumnopipeline {
+pipeline {
     agent any
     stages {
         stage('Clean'){    
