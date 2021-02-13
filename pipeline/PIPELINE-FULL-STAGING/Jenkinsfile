@@ -29,13 +29,8 @@ pipeline {
             agent {
                //instalamos imagen con python. No he conseguido que funcione el virtualenv
                //ni python en la maquina ec2.Por defecto esta intalada la 2.7. He instalado la
-<<<<<<< HEAD
                // 3.8.2, pero al instalar el virtual da un error la 2.7. 
                // Supongo que es error de PATH
-=======
-               // 3.8.2, pero al instalar el virtual da un error por ir a por 
-               //la 2.7. Supongo que es error de PATH
->>>>>>> 21ad58b98fcb4734ffa452e7f6c366a2285be5b4
                docker {
                     image 'python:3-alpine'
                      args '-u root:root'
@@ -46,20 +41,10 @@ pipeline {
                     steps{
                        //instalamos utilidades test
                        //no encuentra requeriments. Error path
-                       /*dir("todo-list-aws/tests") {
+                       dir("todo-list-aws/tests") {
                             sh 'pip install --user -r tests/requirements.txt'
-<<<<<<< HEAD
                         } 
                       
-=======
-                        }*/ 
-                        //pruebas
-                        sh '''
-                        set +x
-                        pip install radon
-                        set -x
-                        '''
->>>>>>> 21ad58b98fcb4734ffa452e7f6c366a2285be5b4
                     }
                 }
                 stage('Test'){
@@ -101,36 +86,20 @@ pipeline {
                             // Unitary testing -> unittest or pytest
                             //modifico modulo TestToDo.py para que la prueba genere xml
                              // Unitary testing -> unittest or pytest
-<<<<<<< HEAD
                             sh ''
                             echo "unittest"
                             sh "python -m unittest TestToDo.py"
                             echo "coverage report -m"
                             sh "coverage report -m"
-=======
-                            /*sh ''
-                            echo "unittest"
-                            sh "python -m unittest TestToDo.py"
-                            echo "coverage report -m"
-                            sh "coverage report -m"*/
->>>>>>> 21ad58b98fcb4734ffa452e7f6c366a2285be5b4
                         }
                     
                     }
                  
-<<<<<<< HEAD
                     post {
-=======
-                    /*post {
->>>>>>> 21ad58b98fcb4734ffa452e7f6c366a2285be5b4
                          always {
                          //junit 'test-reports/*.xml'
                         }
-<<<<<<< HEAD
                     }
-=======
-                    }*/
->>>>>>> 21ad58b98fcb4734ffa452e7f6c366a2285be5b4
                 } 
             }
         }
@@ -144,11 +113,7 @@ pipeline {
                     // Package release and persist in s3 bucket
                     //Si las credenciales han caducado, esto falla.
                     //retorna errores. A revisar
-<<<<<<< HEAD
                     sh "sam package --template-file template.yaml --output-template-file packaged.yaml --s3-bucket ${env.COUNTRY}-${env.TEAM}-${env.ENVIRONMENT}-${env.SERVICE}-${env.RAND_ID}-artifacts" 
-=======
-                    //sh "sam package --template-file template.yaml --output-template-file packaged.yaml --s3-bucket ${env.COUNTRY}-${env.TEAM}-${env.ENVIRONMENT}-${env.SERVICE}-${env.RAND_ID}-artifacts" 
->>>>>>> 21ad58b98fcb4734ffa452e7f6c366a2285be5b4
                 }
                   
             }
@@ -195,11 +160,7 @@ pipeline {
                 
                 dir("todo-list-aws") {
                     // Deploy architecture
-<<<<<<< HEAD
                     sh "yes | sam deploy --no-fail-on-empty-changeset --stack-name ${env.STACK_NAME} --parameter-overrides  Environment=${env.ENVIRONMENT}"
-=======
-                    sh "yes | sam deploy  --stack-name ${env.STACK_NAME} --parameter-overrides Environment=${env.ENVIRONMENT}"
->>>>>>> 21ad58b98fcb4734ffa452e7f6c366a2285be5b4
                 }
                 
             }
@@ -209,7 +170,6 @@ pipeline {
                 
                 script {
                    
-<<<<<<< HEAD
                    script {
                             string code =
                             sh(script: "curl -sLI -w '%{http_code}' GET https://z4vv25xb71.execute-api.us-east-1.amazonaws.com/Prod/todos", returnStdout: true)
@@ -221,8 +181,6 @@ pipeline {
                                 error "Error test integración LIST"
                             }
                         }
-=======
->>>>>>> 21ad58b98fcb4734ffa452e7f6c366a2285be5b4
                   echo "Integration Test after deploy:OK"
                     
                   
@@ -230,9 +188,6 @@ pipeline {
                 
             }
        }
-<<<<<<< HEAD
 
-=======
->>>>>>> 21ad58b98fcb4734ffa452e7f6c366a2285be5b4
     }
 }
