@@ -1,14 +1,14 @@
 pipeline {
     agent any
      options {
-            skipDefaultCheckout(true)
+            //skipDefaultCheckout(true)
             buildDiscarder(logRotator(numToKeepStr: '10'))
-            timestamps()
+            //timestamps()
     }
     stages {
         stage('Clean'){    
             steps {
-                echo "Clean stage"
+                echo "Borramos directorio"
                 deleteDir()
                 sh 'printenv'
             }
@@ -16,24 +16,21 @@ pipeline {
         stage('Checkout') {
             steps {
                 
-                echo "Checkout stage"
-                sh '''
-                    set +x
-                    python --version
-                    set -x 
-                '''
+                echo "Obtenemos brach develop Git Server"
+                
                 //sh "git clone https://${env.CODECOMMIT_USER}:${env.CODECOMMIT_PASSWORD}@git-codecommit.us-east-1.amazonaws.com/v1/repos/todo-list-aws"
                 //descargamos codigo fuente
                 //rama develop
                 sh "git clone --single-branch --branch develop https://${env.CODECOMMIT_USER}:${env.CODECOMMIT_PASSWORD}@github.com/jorgemartin-Unir/todo-list-aws.git"
+                
             }
         }
-       /* stage('Test Group'){
+        stage('Test Group'){
             agent {
-               //instalamos imagen con pytho. No he conseguido que funcione el virtualenv
+               //instalamos imagen con python. No he conseguido que funcione el virtualenv
                //ni python en la maquina ec2.Por defecto esta intalada la 2.7. He instalado la
-               // 3.8.2, pero parece que al crear al instalar el virtual da un error por ir a por 
-               //la 2.7. 
+               // 3.8.2, pero al instalar el virtual da un error la 2.7. 
+               // Supongo que es error de PATH
                docker {
                     image 'python:3-alpine'
                      args '-u root:root'
@@ -46,12 +43,7 @@ pipeline {
                        dir("todo-list-aws/tests") {
                             sh 'pip install --user -r tests/requirements.txt'
                         } 
-                        //pruebas
-                        //sh '''
-                        //set +x
-                        //pip install radon
-                        //set -x
-                        //'''
+                      
                     }
                 }
                 stage('Test'){
@@ -74,137 +66,127 @@ pipeline {
                                 error "No todos los modulos poseen la calidad deseada. No continuamos"
                             }
                         }
-                    //}
-                    //steps{
                         dir("todo-list-aws/test") {
-                            //Si ven este comentario es que me he pasado de horas :-)
                             // Quality program analysis -> flake8
-                            echo 'echo My code has enought quality?'
+                            echo 'Test calidad'
                         }
-                    //}
-                    //steps{
+                        
+                    
+                        
                         dir("todo-list-aws/test") {
-                            //Si ven este comentario es que me he pasado de horas :-) 
                             // Security programa analysis -> bandit
-                            echo 'Make some security analysis of the code. Is the code secure?'
+                            echo 'Test seguridad'
                         }
-                    //}
-                    //steps{
+                        
+                    
+                       
                        echo "Unit test"
                        dir("todo-list-aws/tests/unit") {
                             // Unitary testing -> unittest or pytest
                             //modifico modulo TestToDo.py para que la prueba genere xml
+                             // Unitary testing -> unittest or pytest
                             sh ''
                             echo "unittest"
-                            sh 'python TestToDo.py'
+                            sh "python -m unittest TestToDo.py"
+                            echo "coverage report -m"
+                            sh "coverage report -m"
                         }
+                    
                     }
+                 
                     post {
                          always {
                          junit 'test-reports/*.xml'
                         }
                     }
-                }
+                } 
             }
-        }*/
+        }
         stage('Build') {
             steps {
-                dir("todo-list-aws") {
+                
+               dir("todo-list-aws") {
                     // Build release
                     echo 'Build'
                     sh "sam build"
                     // Package release and persist in s3 bucket
+                    //Si las credenciales han caducado, esto falla.
+                    //retorna errores. A revisar
                     sh "sam package --template-file template.yaml --output-template-file packaged.yaml --s3-bucket ${env.COUNTRY}-${env.TEAM}-${env.ENVIRONMENT}-${env.SERVICE}-${env.RAND_ID}-artifacts" 
                 }
+                  
             }
         }
         stage('Integration Test on local') {
             steps{
-                dir("todo-list-aws/test") {
+                /*  //Pruebas de integracion local no finalizadas. 
+                  //Arrancar el servio local http y concectarse desde curl o test python
+                  //falta informacion
                     // Unittest or pytest                   
                     // Integration test over local -> unittest or pytest against the lambda functions.
-                    echo 'test all methods works fine. Maybe with sam-local and aws dynamodb official docker image'
-                }   
-            }
+                    parallel (
+                      a:{   
+                            dir("todo-list-aws") {
+                            //script inicia server local
+                                sh "./samlocal.sh"
+                            }
+                      },
+                      b:{
+                            sleep 5 
+                            script {
+                                string code =
+                                sh(script: "curl -sLI -w '%{http_code}' GET https://127.0.0.1:8282/todos", returnStdout: true)
+                                echo "HTTP response status code: $code"
+            
+                                if (code == "200") {
+                                    echo response
+                                }else
+                                {
+                                    error "Error test integración LIST"
+                                }
+                            }
+                       }
+                    )
+                    
+                */
+                
+                echo "Integration Test on local"
+            }   
         }
+        
         stage('Deploy'){
             steps{
+                
                 dir("todo-list-aws") {
                     // Deploy architecture
-                    sh "yes | sam deploy  --stack-name ${env.STACK_NAME} --parameter-overrides Environment=${env.ENVIRONMENT}"
-                }   
+                    sh "yes | sam deploy --no-fail-on-empty-changeset --stack-name ${env.STACK_NAME} --parameter-overrides  Environment=${env.ENVIRONMENT}"
+                }
+                
             }
         }
-        
         stage('Integration Test after deploy'){
-             agent {
-               docker {
-                    image 'python:3-alpine'
-                     args '-u root:root'
-                }
-            }
             steps{
+                
                 script {
-                    
-                     final def (String response, int code) =
-                    sh(script: "curl -s -w '\\n%{response_code}' -u GET https://zggunvf6id.execute-api.us-east-1.amazonaws.com/Prod/todos/todos", returnStdout: true).trim()
-                    echo "HTTP response status code: $code"
-
-                    if (code == 200) {
-                        echo response
-                    }else
-                    {
-                        error "Error test integración LIST"
-                    }
-                    
-                    /*final def (String response, int code) =
-                    sh(script: "curl -s -w '\\n%{response_code}' -u POST https://zggunvf6id.execute-api.us-east-1.amazonaws.com/Prod/todos/todos  --data '{ \"text\": \"Learn Serverless\" }'", returnStdout: true).trim()
-                    echo "HTTP response status code: $code"
-
-                    if (code == 200) {
-                        echo response
-                    }else
-                    {
-                        error "Error test integración Create"
-                    }
-                    
                    
+                   script {
+                            string code =
+                            sh(script: "curl -sLI -w '%{http_code}' GET https://z4vv25xb71.execute-api.us-east-1.amazonaws.com/Prod/todos", returnStdout: true)
+                            echo "HTTP response status code: $code"
+                            if (code != "200") {
+                                echo response
+                            }else
+                            {
+                                error "Error test integración LIST"
+                            }
+                        }
+                  echo "Integration Test after deploy:OK"
                     
-                    final def (String response, int code) =
-                    sh(script: "curl -s -w '\\n%{response_code}' -u GET https://zggunvf6id.execute-api.us-east-1.amazonaws.com/Prod/todos/todos", returnStdout: true).trim()
-                    echo "HTTP response status code: $code"
-
-                    if (code == 200) {
-                        echo response
-                    }else
-                    {
-                        error "Error test integración GET"
-                    }
-                    
-                    final def (String response, int code) =
-                    sh(script: "curl -s -w '\\n%{response_code}' -u GET https://zggunvf6id.execute-api.us-east-1.amazonaws.com/Prod/todos/todos", returnStdout: true).trim()
-                    echo "HTTP response status code: $code"
-
-                    if (code == 200) {
-                        echo response
-                    }else
-                    {
-                        error "Error test integración LIST"
-                    }
-                    
-                    final def (String response, int code) =
-                    sh(script: "curl -s -w '\\n%{response_code}' -u GET https://zggunvf6id.execute-api.us-east-1.amazonaws.com/Prod/todos/todos", returnStdout: true).trim()
-                    echo "HTTP response status code: $code"
-
-                    if (code == 200) {
-                        echo response
-                    }else
-                    {
-                        error "Error test integración LIST"
-                    }*/
+                  
                 }
+                
             }
-        }
-        
+       }
+
     }
 }

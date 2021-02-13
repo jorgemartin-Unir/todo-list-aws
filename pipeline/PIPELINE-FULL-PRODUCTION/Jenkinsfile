@@ -1,1 +1,67 @@
-// A rellenar por el alumno
+// A rellenar por el alumnopipeline {
+    agent any
+    stages {
+        stage('Clean'){    
+            steps {
+                echo "Limpieza final"
+                deleteDir()
+                sh 'printenv'
+            }
+        }
+
+        stage('Checkout') {
+           steps {
+                echo "Checkout stage"
+                //sh "git clone https://${env.CODECOMMIT_USER}:${env.CODECOMMIT_PASSWORD}@git-codecommit.us-east-1.amazonaws.com/v1/repos/todo-list-aws"
+                //descargamos codigo fuente
+                //rama develop
+                sh "git clone --single-branch --branch develop https://jorgemartin-Unir:600Jorge14@github.com/jorgemartin-Unir/todo-list-aws.git"
+            }
+        }
+        stage('SetUp'){
+            steps{
+                // Setup Virtualenv for testing
+                echo "setup"
+            }
+        }
+        
+        stage('Build') {
+            steps {
+               dir("todo-list-aws") {
+                    // Build release
+                    echo 'Build'
+                    sh "sam build"
+                    // Package release and persist in s3 bucket
+                    //Si las credenciales han caducado, esto falla.
+                    echo 'Package'
+                    sh "sam package --template-file template.yaml --output-template-file packaged.yaml --s3-bucket es-unir-production-s3-64664-artifacts" 
+                }
+            }
+        }
+        stage('Deploy'){
+            steps{
+                
+                dir("todo-list-aws") {
+                    // Deploy architecture
+                    sh "yes | sam deploy  --no-fail-on-empty-changeset --stack-name todo-list-aws-prod --parameter-overrides Environment=production"
+                }
+            }
+        }
+        stage('Integration Test after deploy'){
+            steps{
+                dir("todo-list-aws") {
+                    // Unittest or pytest                   
+                    // Unitary testing -> unittest or pytest against the lambda functions.
+                    echo 'test all methods works fine'
+                }   
+            }
+        }
+        stage('CleanF'){    
+            steps {
+                echo "Limpieza final"
+                deleteDir()
+                sh 'printenv'
+            }
+        }
+    }
+}

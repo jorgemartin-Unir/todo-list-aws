@@ -1,1 +1,24 @@
-//A rellenar por el alumno
+pipeline {
+    agent any
+    
+    stages 
+    {
+       
+        stage ('Invoke Stagin') {
+            steps {
+                build job: 'PIPELINE-FULL-STAGING'
+            }
+        }
+        stage ('Git Merge') {
+            steps {
+                build job: 'Merge  Branch' //job en Jenkins usando plugion Git
+            }
+        }
+        stage ('Invoke Production') {
+            steps {
+                build job: 'PIPELINE-FULL-PRODUCTION'
+            }
+        }
+        
+    }
+}
